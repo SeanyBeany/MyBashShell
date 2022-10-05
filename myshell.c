@@ -20,13 +20,13 @@ int main(int argc, char *argv[]){
     printf("%s>", cwd);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
-    while(!strcmp(cmd, "exit")){
+    while(cmd != NULL){
         // Print a prompt and read a command from standard input
         pid=fork();
         if(pid!=0){
             /* parent process executes here */
             wait(NULL);
-        }   
+        }       
         else{
             if(cmd != NULL){
             // check for the newline character and overwrite with \0
