@@ -14,8 +14,10 @@ int main(int argc, char *argv[]){
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
     int pid;
+    char cwd[BUFSIZE];
     
-    printf("Enter a command: > ");
+    getcwd(cwd, sizeof(cwd));
+    printf("cwd: %s\n", cwd);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
     while(cmd != NULL){
@@ -47,14 +49,3 @@ int main(int argc, char *argv[]){
     printf("\nAll done.\n");
 } // main 
 
-void printDirectory(){
-    char cwd[BUFSIZE];
-
-    if(getcwd(cwd, BUFSIZE) == NULL){
-        printf("Error getting current directory.\n");
-        exit(0);
-    }
-    
-    else
-        printf("%s\n", cwd);
-}
