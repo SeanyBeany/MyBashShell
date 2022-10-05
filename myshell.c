@@ -14,9 +14,10 @@ int main(int argc, char *argv[]){
     char *cmd;		// pointer to entered command
     int pid;
     char cwd[BUFSIZE];
+    static int percentage = 37; //Ascii value for percentage
     
     getcwd(cwd, sizeof(cwd));
-    printf("%s%", cwd);
+    printf("%s%c", cwd,percentage);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
     while(cmd != NULL){
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]){
             }
         }
         getcwd(cwd, sizeof(cwd));
-        printf("%s>", cwd);
+        printf("%s%c", cwd, percentage);
         cmd = fgets(buffer, BUFSIZE, stdin);
     }
     
