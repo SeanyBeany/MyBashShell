@@ -47,6 +47,14 @@ int main(int argc, char *argv[]){
     printf("\nAll done.\n");
 } // main 
 
-int printDirectory(){
+void printDirectory(){
+    char cwd[BUFSIZE];
+
+    if(getcwd(cwd, BUFSIZE) == NULL){
+        printf("Error getting current directory.\n");
+        exit(0);
+    }
     
+    else
+        printf("%s\n", cwd);
 }
