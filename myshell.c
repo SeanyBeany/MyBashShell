@@ -13,7 +13,6 @@ int main(int argc, char *argv[]){
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
-    int i;
     int pid;
     
     printf("Enter a command: > ");
