@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
     printf("%s>", cwd);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
-    while(cmd != NULL){
+    while(!strcmp(cmd, "exit")){
         // Print a prompt and read a command from standard input
         pid=fork();
         if(pid!=0){
