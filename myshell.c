@@ -46,3 +46,7 @@ int main(int argc, char *argv[]){
     
     printf("\nAll done.\n");
 } // main 
+
+int printDirectory(){
+    
+}
