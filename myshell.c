@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     char cwd[BUFSIZE];
     
     getcwd(cwd, sizeof(cwd));
-    printf("cwd: %s\n", cwd);
+    printf("%s>", cwd);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
     while(cmd != NULL){
@@ -42,7 +42,8 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        printf("Enter a command: > ");
+        getcwd(cwd, sizeof(cwd));
+        printf("%s>", cwd);
         cmd = fgets(buffer, BUFSIZE, stdin);
     }
     
