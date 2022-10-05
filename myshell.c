@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +16,7 @@ int main(int argc, char *argv[]){
     char cwd[BUFSIZE];
     
     getcwd(cwd, sizeof(cwd));
-    printf("%s>", cwd);
+    printf("%s%", cwd);
     cmd = fgets(buffer, BUFSIZE, stdin);
     
     while(cmd != NULL){
