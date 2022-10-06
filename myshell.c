@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]){
     
-    int ret_code;		// return code
+    //int ret_code;		// return code
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
@@ -20,8 +20,6 @@ int main(int argc, char *argv[]){
     
     
     while(1){       
-        
-        char* str;
 
         getcwd(cwd, sizeof(cwd));
         printf("%s%c", cwd, percentage);
