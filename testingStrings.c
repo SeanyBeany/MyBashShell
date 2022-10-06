@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 
 #define BUFSIZE 100
+#define EXIT_SUCCESS 0
 
 int main(int argc, char *argv[]){
     
@@ -23,7 +24,13 @@ int main(int argc, char *argv[]){
     while(cmd != NULL){       
         char* token;
         char* str;
-        printf("%s\n",cmd);
+
+        while(strcmp(cmd, "\n") == 0){
+            getcwd(cwd, sizeof(cwd));
+            printf("%s%c", cwd,percentage);
+            cmd = fgets(buffer, BUFSIZE, stdin);
+        }
+        
         if(cmd != NULL){
             // check for the newline character and overwrite with \0
             len = strlen(buffer);
@@ -31,10 +38,10 @@ int main(int argc, char *argv[]){
                 buffer[len-1] = '\0';
             }
         }
-        getcwd(cwd, sizeof(cwd));
-        printf("%s%c", cwd, percentage);
-
-        
+        if(strcmp(cmd, "exit") != 0){ //Check if program is going to exit and thus no pwd is required
+            getcwd(cwd, sizeof(cwd));
+            printf("%s%c", cwd, percentage);
+        }
         //tokenizes the command string
         char *p = cmd;
         char* tokens[BUFSIZE];
@@ -45,9 +52,13 @@ int main(int argc, char *argv[]){
                 break;
             }
         }
-        for(int i = 0; tokens[i] != NULL; i++){
-            printf("%s", tokens[i]);
+        
+        //exit commands implementation
+        if(strcmp("exit", tokens[0]) == 0){
+            printf("Program has successfully exited\n");
+            return EXIT_SUCCESS;
         }
+        
         cmd = fgets(buffer, BUFSIZE, stdin);
     }
     /**
@@ -67,7 +78,7 @@ int main(int argc, char *argv[]){
     printf("%d",what);
     ret_code = execlp(tokens[0], tokens[0], NULL);
     */
-    return 0;
+    return EXIT_SUCCESS;
 
 }
 
