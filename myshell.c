@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
             }
             // execute the command
             ret_code = execlp(cmd, cmd, NULL);
-            if(ret_code != 0){
+            if(ret_code != 0 && strcmp(cmd, "\n") == 0){
                 printf("Error executing %s.\n", cmd);
                 exit(0);
                 }
@@ -45,6 +45,11 @@ int main(int argc, char *argv[]){
         getcwd(cwd, sizeof(cwd));
         printf("%s%c", cwd, percentage);
         cmd = fgets(buffer, BUFSIZE, stdin);
+
+        while(strcmp(cmd, "\n") == 0){
+            printf("%s%c", cwd, percentage);
+            cmd = fgets(buffer, BUFSIZE, stdin);
+        }
     }
     
     printf("\nAll done.\n");
