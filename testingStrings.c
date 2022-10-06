@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     int pid;
     char cwd[BUFSIZE];
     static int percentage = 37; //Ascii value for percentage
-    /**
+    
     getcwd(cwd, sizeof(cwd));
     printf("%s%c", cwd,percentage);
     cmd = fgets(buffer, BUFSIZE, stdin);
@@ -41,11 +41,23 @@ int main(int argc, char *argv[]){
         getcwd(cwd, sizeof(cwd));
         printf("%s%c", cwd, percentage);
 
-        cmd = fgets(buffer, BUFSIZE, stdin);
+        
         //tokenizes the command string
-        str = cmd;
-        */
-    
+        char *p = cmd;
+        char* tokens[BUFSIZE];
+
+        for(int i = 0; i < BUFSIZE; i++){
+            tokens[i] = strtok_r(p, " ", &p);
+            if(tokens[i] == NULL){
+                break;
+            }
+        }
+        for(int i = 0; tokens[i] != NULL; i++){
+            printf("%s", tokens[i]);
+        }
+        cmd = fgets(buffer, BUFSIZE, stdin);
+    }
+    /**
     cmd = fgets(buffer, BUFSIZE, stdin);
     char *p = cmd;
     char *tokens[BUFSIZE];
@@ -56,9 +68,13 @@ int main(int argc, char *argv[]){
             break;
         }
     }
-    
-    ret_code = execlp(cmd, cmd, NULL);
+    */
+    /**
+    int what = strcmp(tokens[0], "ls");
+    printf("%d",what);
+    ret_code = execlp(tokens[0], tokens[0], NULL);
+    */
     return 0;
+    
 }
-
 
