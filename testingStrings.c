@@ -45,14 +45,20 @@ int main(int argc, char *argv[]){
         //tokenizes the command string
         str = cmd;
         */
-
+    
     cmd = fgets(buffer, BUFSIZE, stdin);
-    char* token;
-    char* rest = cmd;
-    while ((token = strtok_r(rest, " ", &rest)))
-        printf("%s\n", token);
-    return (0);
+    char *p = cmd;
+    char *tokens[BUFSIZE];
 
+    for(int i = 0; i < BUFSIZE; i++){
+        tokens[i] = strtok_r(p, " ", &p);
+        if(tokens[i] == NULL){
+            break;
+        }
+    }
+    
+    ret_code = execlp(cmd, cmd, NULL);
+    return 0;
 }
 
 
