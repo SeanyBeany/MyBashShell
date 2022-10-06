@@ -17,13 +17,15 @@ int main(int argc, char *argv[]){
     char cwd[BUFSIZE];
     static int percentage = 37; //Ascii value for percentage
     
-    getcwd(cwd, sizeof(cwd));
-    printf("%s%c", cwd,percentage);
-    cmd = fgets(buffer, BUFSIZE, stdin);
     
-    while(cmd != NULL){       
+    
+    while(1){       
         char* token;
         char* str;
+
+        getcwd(cwd, sizeof(cwd));
+        printf("%s%c", cwd, percentage);
+        cmd = fgets(buffer, BUFSIZE, stdin);
 
         while(strcmp(cmd, "\n") == 0){
             getcwd(cwd, sizeof(cwd));
@@ -38,10 +40,11 @@ int main(int argc, char *argv[]){
                 buffer[len-1] = '\0';
             }
         }
-        if(strcmp(cmd, "exit") != 0){ //Check if program is going to exit and thus no pwd is required
-            getcwd(cwd, sizeof(cwd));
-            printf("%s%c", cwd, percentage);
-        }
+
+        
+        
+        
+        
         //tokenizes the command string
         char *p = cmd;
         char* tokens[BUFSIZE];
@@ -53,13 +56,18 @@ int main(int argc, char *argv[]){
             }
         }
         
+        //cd command implementation
+        if(strcmp(tokens[0], "cd") == 0){
+            chdir(tokens[1]);
+        }
+        
         //exit commands implementation
         if(strcmp("exit", tokens[0]) == 0){
             printf("Program has successfully exited\n");
             return EXIT_SUCCESS;
         }
+    
         
-        cmd = fgets(buffer, BUFSIZE, stdin);
     }
     /**
     cmd = fgets(buffer, BUFSIZE, stdin);
