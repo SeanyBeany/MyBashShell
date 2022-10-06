@@ -13,14 +13,14 @@ int main(int argc, char *argv[]){
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
-    int pid;
+    //int pid;
     char cwd[BUFSIZE];
     static int percentage = 37; //Ascii value for percentage
     
     
     
     while(1){       
-        char* token;
+        
         char* str;
 
         getcwd(cwd, sizeof(cwd));
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
             return EXIT_SUCCESS;
         }
 
-        ret_code = execvp(1, tokens[0]);
+        
         
     }
 
