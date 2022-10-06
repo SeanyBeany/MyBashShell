@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 
 #define BUFSIZE 100
+#define EXIT_SUCCESS 0
 
 int main(int argc, char *argv[]){
     
@@ -16,42 +17,67 @@ int main(int argc, char *argv[]){
     char cwd[BUFSIZE];
     static int percentage = 37; //Ascii value for percentage
     
-    getcwd(cwd, sizeof(cwd));
-    printf("%s%c", cwd,percentage);
-    cmd = fgets(buffer, BUFSIZE, stdin);
     
-    while(cmd != NULL){
-        // Print a prompt and read a command from standard input
-        pid=fork();
-        if(pid!=0){
-            /* parent process executes here */
-            wait(NULL);
-        }       
-        else{
-            if(cmd != NULL){
-            // check for the newline character and overwrite with \0
-            len = strlen(buffer);
-            if(buffer[len-1] == '\n'){
-                buffer[len-1] = '\0';
-            }
-            // execute the command
-            ret_code = execlp(cmd, cmd, NULL);
-            if(ret_code != 0 && strcmp(cmd, "\n") == 0){
-                printf("Error executing %s.\n", cmd);
-                exit(0);
-                }
-            }
-        }
+    
+    while(1){       
+        char* token;
+        char* str;
+
         getcwd(cwd, sizeof(cwd));
         printf("%s%c", cwd, percentage);
         cmd = fgets(buffer, BUFSIZE, stdin);
 
         while(strcmp(cmd, "\n") == 0){
-            printf("%s%c", cwd, percentage);
+            getcwd(cwd, sizeof(cwd));
+            printf("%s%c", cwd,percentage);
             cmd = fgets(buffer, BUFSIZE, stdin);
         }
+        
+        if(cmd != NULL){
+            // check for the newline character and overwrite with \0
+            len = strlen(buffer);
+            if(buffer[len-1] == '\n'){
+                buffer[len-1] = '\0';
+            }
+        }
+
+        
+        
+        
+        
+        //tokenizes the command string
+        char *p = cmd;
+        char* tokens[BUFSIZE];
+
+        for(int i = 0; i < BUFSIZE; i++){
+            tokens[i] = strtok_r(p, " ", &p);
+            if(tokens[i] == NULL){
+                break;
+            }
+        }
+        
+        //cd command implementation
+        if(strcmp(tokens[0], "cd") == 0){
+            chdir(tokens[1]);
+        }
+        
+        //exit commands implementation
+        if(strcmp("exit", tokens[0]) == 0){
+            printf("Program has successfully exited\n");
+            return EXIT_SUCCESS;
+        }
+
+        ret_code = execvp(1, tokens[0]);
+        
     }
+
     
-    printf("\nAll done.\n");
-} // main 
+    /**
+    int what = strcmp(tokens[0], "ls");
+    printf("%d",what);
+    ret_code = execlp(tokens[0], tokens[0], NULL);
+    */
+    return EXIT_SUCCESS;
+
+}
 
