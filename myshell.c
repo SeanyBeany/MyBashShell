@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[]){
     
-    //int ret_code;		// return code
+    int ret_code;		// return code
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
@@ -78,9 +78,15 @@ int main(int argc, char *argv[]){
             command[0] = tokens[0];
             command[1] = tokens[1];
             command[2] = NULL;
-            execvp(tokens[0], command);
-            fgets(buffer, BUFSIZE, stdin);
-            exit(0);
+            ret_code = execvp(tokens[0], command);
+            if(ret_code == -1){
+                perror("error executing command");
+                fgets(buffer, BUFSIZE, stdin);
+                exit(1);
+            }
+            else{
+                exit(0);
+            }
         }
         else{
             wait(&status);
