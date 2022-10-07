@@ -9,14 +9,33 @@
 #define COMMAND_LIMIT 20
 
 int main(int argc, char *argv[]){
+    char buffer[BUFSIZE];
 
-    char *name[4];
+    pid_t pid;
+    int status;
+    char *name[3];
+    while(1){
+        pid = fork(); 
+        if(pid == -1){
+            perror("fork");
+            return 2;
+        }
 
-    name[0] = "sh";
-    name[1] = "-c";
-    name[2] = "cd /home/";
-    name[3] = NULL;
-    execvp("/bin/sh", name);
-    printf("word");
+        if(pid == 0){
+            name[0] = "echo";
+            name[1] = "word";
+            name[2] = NULL;
+            execvp("echo", name);
+            printf("word");
+            fgets(buffer, BUFSIZE, stdin);
+            exit(0);
+        }
+        else{
+            wait(&status);
+            printf("Status : %d\n", WEXITSTATUS(status));
+        }
+        printf("owning");
+
+    }
 }
     
