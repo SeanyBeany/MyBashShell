@@ -10,14 +10,15 @@
 
 int main(int argc, char *argv[]){
     
-    //int ret_code;		// return code
+    int ret_code;		// return code
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
-    //int pid;
+    pid_t pid;
     char cwd[BUFSIZE]; //Contains path to current working directory
     static int percentage = 37; //Ascii value for percentage
-    //char* command[COMMAND_LIMIT]; //Array of all the strings to execute a system command with execvp
+    char* command[COMMAND_LIMIT]; //Array of all the strings to execute a system command with execvp
+    int status; // status of parent or child process
     
     
     
@@ -65,9 +66,28 @@ int main(int argc, char *argv[]){
             printf("Program has successfully exited\n");
             return EXIT_SUCCESS;
         }
+    
+        
+        pid = fork(); 
+        if(pid == -1){
+            perror("fork");
+            return 2;
+        }
+
+        if(pid == 0){
+            command[0] = tokens[0];
+            command[1] = tokens[1];
+            command[2] = NULL;
+            execvp("echo", command);
+            fgets(buffer, BUFSIZE, stdin);
+            exit(0);
+        }
+        else{
+            wait(&status);
+            printf("Status : %d\n", WEXITSTATUS(status));
+        }
 
         
-
     }
 
     
