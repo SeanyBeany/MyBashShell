@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
         
         pid = fork(); 
         if(pid == -1){
-            perror("fork");
+            perror("error creating child process");
             return 2;
         }
 
@@ -84,7 +84,6 @@ int main(int argc, char *argv[]){
         }
         else{
             wait(&status);
-            printf("Status : %d\n", WEXITSTATUS(status));
         }
 
         
