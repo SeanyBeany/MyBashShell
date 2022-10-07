@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
             printf("Status : %d\n", WEXITSTATUS(status));
         }
         printf("owning");
-
+        return(0);
     }
 }
     

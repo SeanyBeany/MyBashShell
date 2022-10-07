@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-
+#include "myshell.h"
 #define BUFSIZE 1000
 #define EXIT_SUCCESS 0
 #define COMMAND_LIMIT 100

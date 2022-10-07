@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +5,8 @@
 #include <sys/wait.h>
 
 #define BUFSIZE 100
+#define EXIT_SUCCESS 0
+#define COMMAND_LIMIT 20
 
 int main(int argc, char *argv[]){
     
@@ -13,42 +14,98 @@ int main(int argc, char *argv[]){
     int len;		// length of entered command
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
-    int pid;
-    char cwd[BUFSIZE];
+    pid_t pid;
+    char cwd[BUFSIZE]; //Contains path to current working directory
+    static int percentage = 37; //Ascii value for percentage
+    char* command[COMMAND_LIMIT]; //Array of all the strings to execute a system command with execvp
+    int status; // status of parent or child process
     
-    getcwd(cwd, sizeof(cwd));
-    printf("%s>", cwd);
-    cmd = fgets(buffer, BUFSIZE, stdin);
     
-    while(cmd != NULL){
-        // Print a prompt and read a command from standard input
-        pid=fork();
-        if(pid!=0){
-            /* parent process executes here */
-            wait(NULL);
-        }       
-        else{
-            if(cmd != NULL){
+    
+    while(1){       
+
+        getcwd(cwd, sizeof(cwd));
+        printf("%s%c", cwd, percentage);
+        cmd = fgets(buffer, BUFSIZE, stdin);
+        while(strcmp(cmd, "\n") == 0){
+            getcwd(cwd, sizeof(cwd));
+            printf("%s%c", cwd,percentage);
+            cmd = fgets(buffer, BUFSIZE, stdin);
+        }
+        
+        if(cmd != NULL){
             // check for the newline character and overwrite with \0
             len = strlen(buffer);
             if(buffer[len-1] == '\n'){
                 buffer[len-1] = '\0';
             }
-            // execute the command
-            ret_code = execlp(cmd, cmd, NULL);
-            if(ret_code != 0){
-                printf("Error executing %s.\n", cmd);
-                exit(0);
+        }
+
+        
+        
+        
+        
+        //tokenizes the command string
+        char *p = cmd;
+        char* tokens[BUFSIZE];
+        int tokenCounter = 0; //Counter for tokens
+        for(int i = 0; i < BUFSIZE; i++){
+            tokens[i] = strtok_r(p, " ", &p);
+            if(tokens[i] == NULL){
+                break;
+            }
+            tokenCounter++;
+        }
+
+        //cd command implementation
+        if(strcmp(tokens[0], "cd") == 0){
+            chdir(tokens[1]);
+        }
+        
+        //exit commands implementation
+        else if(strcmp("exit", tokens[0]) == 0){
+            printf("Program has successfully exited\n");
+            return EXIT_SUCCESS;
+        }
+    
+        else{
+            pid = fork(); 
+            if(pid == -1){
+                perror("error creating child process");
+                return 2;
+            }
+
+            if(pid == 0){
+                for(int i =0; i< tokenCounter; i++){
+                command[i] = tokens[i];
+                }
+                command[tokenCounter] = NULL;
+                ret_code = execvp(tokens[0], command);
+                if(ret_code == -1){
+                    perror("error executing command");
+                    exit(1);
+                }
+                else{
+                    exit(0);
                 }
             }
+            else{
+                wait(&status);
+            }
         }
-        getcwd(cwd, sizeof(cwd));
-        printf("%s>", cwd);
-        cmd = fgets(buffer, BUFSIZE, stdin);
+
+        
     }
+
     
-    printf("\nAll done.\n");
-} // main 
+    /**
+    int what = strcmp(tokens[0], "ls");
+    printf("%d",what);
+    ret_code = execlp(tokens[0], tokens[0], NULL);
+    */
+    return EXIT_SUCCESS;
+
+}
 
 CC=gcc
 CFLAGS=-Wall -I.
