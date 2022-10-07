@@ -6,6 +6,7 @@
 
 #define BUFSIZE 100
 #define EXIT_SUCCESS 0
+#define COMMAND_LIMIT 20
 
 int main(int argc, char *argv[]){
     
@@ -14,8 +15,9 @@ int main(int argc, char *argv[]){
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
     //int pid;
-    char cwd[BUFSIZE];
+    char cwd[BUFSIZE]; //Contains path to current working directory
     static int percentage = 37; //Ascii value for percentage
+    //char* command[COMMAND_LIMIT]; //Array of all the strings to execute a system command with execvp
     
     
     
@@ -24,7 +26,6 @@ int main(int argc, char *argv[]){
         getcwd(cwd, sizeof(cwd));
         printf("%s%c", cwd, percentage);
         cmd = fgets(buffer, BUFSIZE, stdin);
-
         while(strcmp(cmd, "\n") == 0){
             getcwd(cwd, sizeof(cwd));
             printf("%s%c", cwd,percentage);
@@ -66,7 +67,7 @@ int main(int argc, char *argv[]){
         }
 
         
-        
+
     }
 
     
