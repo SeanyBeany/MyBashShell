@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
             command[0] = tokens[0];
             command[1] = tokens[1];
             command[2] = NULL;
-            execvp("echo", command);
+            execvp(tokens[0], command);
             fgets(buffer, BUFSIZE, stdin);
             exit(0);
         }
