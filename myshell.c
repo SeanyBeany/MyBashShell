@@ -6,7 +6,7 @@
 
 #define BUFSIZE 1000
 #define EXIT_SUCCESS 0
-#define COMMAND_LIMIT 20
+#define COMMAND_LIMIT 100
 
 int main(int argc, char *argv[]){
     
@@ -15,21 +15,17 @@ int main(int argc, char *argv[]){
     char buffer[BUFSIZE];	// room for 80 chars plus \0
     char *cmd;		// pointer to entered command
     pid_t pid;  //pid of the current child or parent process
-    char cwd[BUFSIZE]; //Contains path to current working directory
-    static int percentage = 37; //Ascii value for percentage
     char* command[COMMAND_LIMIT]; //Array of all the strings to execute a system command with execvp
     int status; // status of parent or child process
     
     
     
-    while(1){       
-
-        getcwd(cwd, sizeof(cwd));
-        printf("%s%c", cwd, percentage);
+    while(1){      
+         
+        printDirectory();
         cmd = fgets(buffer, BUFSIZE, stdin);
         while(strcmp(cmd, "\n") == 0){
-            getcwd(cwd, sizeof(cwd));
-            printf("%s%c", cwd,percentage);
+            printDirectory();
             cmd = fgets(buffer, BUFSIZE, stdin);
         }
         
@@ -86,7 +82,7 @@ int main(int argc, char *argv[]){
                     perror("error executing command");
                     exit(1);
                 }
-                else{ //execute success return 0
+                else{ //successful execution: return 0
                     exit(0);
                 }
             }
@@ -103,3 +99,9 @@ int main(int argc, char *argv[]){
     return -1; 
 }
 
+void printDirectory() {
+    char cwd[BUFSIZE]; //Contains path to current working directory
+    static int percentage = 37; //Ascii value for percentage
+    getcwd(cwd, sizeof(cwd));
+    printf("%s%c", cwd, percentage);   
+}
