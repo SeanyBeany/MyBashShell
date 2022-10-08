@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-Wall -I.
 DEPS=myshell.h
 OBJS=myshell.o
-EXE=myshell:
+EXE=myshell
 DEBUG=-g
 
 myshell: $(OBJS)
